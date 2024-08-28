@@ -1,6 +1,49 @@
-{% extends 'layout.html' %}
-{% block title %}Predict{% endblock %}
-{% block heading %}Disease Prediction Based on Symtoms{% endblock %}
+{% extends 'layout.html' %} 
+{% block title %}Predict{% endblock %} 
+{% block heading %}Disease Prediction Based on Symtoms{% endblock %} 
 {% block content %}
-<p>HELLO FROM HOME PAGE</p>
-{% endblock %}
+<form action="" method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="search_symptoms">
+            Search your Symptoms
+            <select name="symptoms" multiple="multiple" class="select2" style="width: 100%;">
+                {% for symptom in symptoms %}
+                <option value={{symptom}}>{{symptom}}</option>    
+                {% endfor %}
+            </select>
+        </label>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{%if results%}
+<table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Decision Tree</th>
+        <th scope="col">Gradient Boost</th>
+        <th scope="col">Multinomial NB</th>
+        <th scope="col">Random Forest</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        {% for result in results %}
+            <td>{{result|join:", "}}</td>
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+{%endif%}
+{% endblock %} 
+{%block script %}
+<script>
+    // Initialize select2
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Select your symptoms",
+            allowClear: true
+        });
+    });
+</script>
+{%endblock%}
